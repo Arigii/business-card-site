@@ -1,4 +1,5 @@
 from sqlalchemy import Column, VARCHAR, ForeignKey, Integer
+from sqlalchemy.orm import relationship
 
 from app.domain.models.base import AdvancedBaseModel
 
@@ -10,3 +11,5 @@ class User(AdvancedBaseModel):
     password = Column(VARCHAR(150), nullable=False)
 
     profile_id = Column(Integer, ForeignKey('profiles.id'), nullable=False)
+
+    profile = relationship('Profile', back_populates='user')

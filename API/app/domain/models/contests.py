@@ -1,4 +1,5 @@
 from sqlalchemy import VARCHAR, Column, String, ForeignKey, Integer, Boolean
+from sqlalchemy.orm import relationship
 
 from app.domain.models.base import AdvancedBaseModel
 
@@ -15,3 +16,9 @@ class Contest(AdvancedBaseModel):
 
     project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
     status_id = Column(Integer, ForeignKey('contest_status.id'), nullable=False)
+
+    project = relationship('Project', back_populates='contests')
+    status = relationship('ContestStatus', back_populates='contests')
+
+    carousel_photos = relationship('ContestCarouselPhoto', back_populates='contest')
+    files = relationship('ContestFile', back_populates='contest')

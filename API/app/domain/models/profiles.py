@@ -1,4 +1,5 @@
 from sqlalchemy import Column, VARCHAR, Date, ForeignKey, Integer
+from sqlalchemy.orm import relationship
 
 from app.domain.models.base import AdvancedBaseModel
 
@@ -15,3 +16,8 @@ class Profile(AdvancedBaseModel):
 
     role_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
     team_id = Column(Integer, ForeignKey('teams.id'), nullable=False)
+
+    role = relationship('Role', back_populates='profiles')
+    team = relationship('Team', back_populates='profiles')
+
+    user = relationship('User', back_populates='profile')
