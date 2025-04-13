@@ -12,3 +12,4 @@ class Project(AdvancedBaseModel):
 
     contest = relationship("Contest", back_populates="project")
     files = relationship("ProjectFile", back_populates="project")
+    members = relationship("ProjectMember", back_populates="project")

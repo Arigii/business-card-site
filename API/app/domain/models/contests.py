@@ -15,7 +15,7 @@ class Contest(AdvancedBaseModel):
     is_win = Column(Boolean)
 
     project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
-    status_id = Column(Integer, ForeignKey('contest_status.id'), nullable=False)
+    status_id = Column(Integer, ForeignKey('contest_statuses.id'), nullable=False)
 
     project = relationship('Project', back_populates='contests')
     status = relationship('ContestStatus', back_populates='contests')
