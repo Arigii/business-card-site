@@ -11,4 +11,4 @@ class ProfilePhoto(AdvancedBaseModel):
 
     profile_id = Column(Integer, ForeignKey('profiles.id'), nullable=False)
 
-    profile = relationship('Profile', back_populates='photos')
+    profile = relationship('Profile', back_populates='profile_photos')

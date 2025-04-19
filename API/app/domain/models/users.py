@@ -1,5 +1,6 @@
 from sqlalchemy import Column, VARCHAR, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.domain.models.base import AdvancedBaseModel
 
@@ -13,3 +14,9 @@ class User(AdvancedBaseModel):
     profile_id = Column(Integer, ForeignKey('profiles.id'), nullable=False)
 
     profile = relationship('Profile', back_populates='user')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)

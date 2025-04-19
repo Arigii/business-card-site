@@ -21,5 +21,5 @@ class Profile(AdvancedBaseModel):
     team = relationship('Team', back_populates='profiles')
 
     user = relationship('User', back_populates='profile')
-    profile_photo = relationship('ProfilePhoto', back_populates='profile')
+    profile_photos = relationship('ProfilePhoto', back_populates='profile')
     projects = relationship('ProjectMember', back_populates='profile')
