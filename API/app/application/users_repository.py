@@ -15,10 +15,22 @@ class UsersRepository:
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
+    async def get_by_id_with_role(self, user_id: int) -> Optional[User]:
+        stmt = (
+            select(User)
+            .filter_by(id=user_id)
+            .options(
+                joinedload(User.profile).joinedload(Profile.role)
+            )
+        )
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
+
     async def get_by_login(self, login: str) -> Optional[User]:
         stmt = (
             select(User)
             .filter_by(login=login)
+            .options(joinedload(User.profile))
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
