@@ -6,6 +6,7 @@ from app.domain.entities.profile import ProfileEntity
 
 class UserEntity(BaseUserEntity):
     id: Optional[int] = None
+    password: Optional[str] = None
 
     profile_id: int
 

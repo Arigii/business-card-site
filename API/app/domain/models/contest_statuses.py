@@ -9,4 +9,4 @@ class ContestStatus(AdvancedBaseModel):
 
     title = Column(VARCHAR(150), unique=True, nullable=False)
 
-    contest = relationship("Contest", back_populates="status")
+    contests = relationship("Contest", back_populates="status")

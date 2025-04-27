@@ -7,6 +7,7 @@ from app.application.profiles_repository import ProfilesRepository
 from app.application.roles_repository import RolesRepository
 from app.application.teams_repository import TeamsRepository
 from app.application.users_repository import UsersRepository
+from app.domain.entities.profile import ProfileEntity
 from app.domain.entities.register import RegisterEntity
 from app.domain.entities.user import UserEntity
 from app.domain.models import User, Profile
@@ -40,7 +41,10 @@ class UsersService:
         user_model.profile_id = profile_model.id
         user_model = await self.users_repository.create(user_model)
 
-        return UserEntity
+        user_entity = self.user_model_to_entity(user_model)
+        user_entity.profile = self.profile_model_to_entity(profile_model)
+
+        return user_entity
 
     @staticmethod
     def is_strong_password(password):
@@ -86,8 +90,23 @@ class UsersService:
         return user, pofile
 
     @staticmethod
+    def profile_model_to_entity(profile_model: Profile) -> ProfileEntity:
+        return ProfileEntity(
+            id=profile_model.id,
+            first_name=profile_model.first_name,
+            last_name=profile_model.last_name,
+            patronymic=profile_model.patronymic,
+            birthday=profile_model.birthday,
+            email=profile_model.email,
+            phone=profile_model.phone,
+            role_id=profile_model.role_id,
+            team_id=profile_model.team_id,
+        )
+
+    @staticmethod
     def user_model_to_entity(user_model: User) -> UserEntity:
         return UserEntity(
             id=user_model.id,
             login=user_model.login,
+            profile_id=user_model.profile_id,
         )

@@ -10,6 +10,6 @@ class Project(AdvancedBaseModel):
     description = Column(VARCHAR(150))
     repository_url = Column(String, nullable=False)
 
-    contest = relationship("Contest", back_populates="project")
+    contests = relationship("Contest", back_populates="project")
     files = relationship("ProjectFile", back_populates="project")
     members = relationship("ProjectMember", back_populates="project")

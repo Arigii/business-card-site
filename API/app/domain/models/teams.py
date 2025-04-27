@@ -12,4 +12,4 @@ class Team(AdvancedBaseModel):
     logo = Column(String)
     git_url = Column(String)
 
-    profile = relationship("Profile", back_populates="team")
+    profiles = relationship("Profile", back_populates="team")

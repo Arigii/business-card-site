@@ -1,4 +1,4 @@
-from sqlalchemy import Column, VARCHAR, ForeignKey, Integer
+from sqlalchemy import Column, VARCHAR, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -9,7 +9,7 @@ class User(AdvancedBaseModel):
     __tablename__ = 'users'
 
     login = Column(VARCHAR(150), unique=True, nullable=False)
-    password = Column(VARCHAR(150), nullable=False)
+    password = Column(String, nullable=False)
 
     profile_id = Column(Integer, ForeignKey('profiles.id'), nullable=False)
 
