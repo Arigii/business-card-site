@@ -17,7 +17,7 @@ router = APIRouter()
     summary='Get all teams',
     description='Returns all teams',
 )
-async def create_team(
+async def get_all_teams(
         db: AsyncSession = Depends(get_db),
         user=Depends(get_current_user),
 ):
