@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 from typing_extensions import Optional
 
-from app.domain.models import User
+from app.domain.models import User, Profile
 
 
 class UsersRepository:
@@ -19,7 +19,6 @@ class UsersRepository:
         stmt = (
             select(User)
             .filter_by(login=login)
-            .options(joinedload(User.role))
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()

@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     SECRET_KEY: str
     PREFIX: str = ''
+    ALGORITHM: str = 'HS256'
 
     class Config:
         env_file = '.env'
@@ -14,7 +15,7 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-def det_auth_data():
+def get_auth_data():
     return {
         'secret_key': settings.SECRET_KEY,
         'algorithm': settings.ALGORITHM
