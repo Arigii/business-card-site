@@ -1,9 +1,11 @@
 <script setup>
+
 </script>
 
 <template>
-  <router-view />
+12345
 </template>
 
 <style scoped>
+
 </style>
