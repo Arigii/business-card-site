@@ -1,3 +1,5 @@
+from typing import Optional
+
 import jwt
 from fastapi import Depends, HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -15,7 +17,7 @@ security = HTTPBearer()
 async def get_current_user(
         credentials: HTTPAuthorizationCredentials = Security(security),
         db: AsyncSession = Depends(get_db)
-):
+) -> Optional[User]:
     auth_data = get_auth_data()
 
     try:
@@ -36,7 +38,7 @@ async def get_current_user(
     return user
 
 
-def require_admin(user: User = Depends(get_current_user)):
+def require_admin(user: User = Depends(get_current_user)) -> Optional[User]:
     if user.profile.role.title != "Администратор":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 

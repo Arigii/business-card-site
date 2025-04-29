@@ -35,6 +35,12 @@ class UsersService:
                 detail="The role with this ID was not found",
             )
 
+        if not self.is_strong_password(register_entity.password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The password is too weak",
+            )
+
         user_model, profile_model = self.register_entity_to_models(register_entity)
 
         profile_model = await self.profiles_repository.create(profile_model)
@@ -45,6 +51,27 @@ class UsersService:
         user_entity.profile = self.profile_model_to_entity(profile_model)
 
         return user_entity
+
+    async def change_user_password(self, user_id: int, new_password: str) -> Optional[UserEntity]:
+        user_model = await self.users_repository.get_by_id(user_id)
+
+        if user_model is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The user with this ID was not found",
+            )
+
+        if not self.is_strong_password(new_password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The password is too weak",
+            )
+
+        user_model.set_password(new_password)
+
+        user_model = await self.users_repository.update(user_model)
+
+        return self.user_model_to_entity(user_model)
 
     @staticmethod
     def is_strong_password(password):
