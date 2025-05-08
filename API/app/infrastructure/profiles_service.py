@@ -23,14 +23,14 @@ class ProfilesService:
         if team is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The team with this ID was not found",
+                detail='The team with this ID was not found',
             )
 
         role = await self.roles_repository.get_by_id(profile.role_id)
         if role is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The role with this ID was not found",
+                detail='The role with this ID was not found',
             )
 
         profile_model = self.entity_to_model(profile)
@@ -46,28 +46,28 @@ class ProfilesService:
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The user with this ID was not found",
+                detail='The user with this ID was not found',
             )
 
         profile_model = await self.profiles_repository.get_by_id(profile_id)
         if profile_model.id != user.profile_id and user.profile.role.title != 'Администратор':
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Permission denied",
+                detail='Permission denied',
             )
 
         team = await self.teams_repository.get_by_id(profile.team_id)
         if team is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The team with this ID was not found",
+                detail='The team with this ID was not found',
             )
 
         role = await self.roles_repository.get_by_id(profile.role_id)
         if role is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The role with this ID was not found",
+                detail='The role with this ID was not found',
             )
 
         profile_model.first_name = profile.first_name
@@ -88,14 +88,14 @@ class ProfilesService:
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="The user with this ID was not found",
+                detail='The user with this ID was not found',
             )
 
         profile_model = await self.profiles_repository.get_by_id(profile_id)
         if profile_model.id != user.profile_id and user.profile.role.title != 'Администратор':
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Permission denied",
+                detail='Permission denied',
             )
 
         result = await self.profiles_repository.delete(profile_model)

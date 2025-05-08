@@ -17,7 +17,7 @@ router = APIRouter()
     summary='Create a new profile',
     description='Creates a new profile',
 )
-async def create_team(
+async def create_profile(
         profile: ProfileEntity,
         db: AsyncSession = Depends(get_db),
         user=Depends(require_admin),
@@ -32,11 +32,11 @@ async def create_team(
     summary='Update a profile',
     description='Updates a profile',
 )
-async def create_team(
+async def update_profile(
         profile_id: int,
         profile: ProfileEntity,
         db: AsyncSession = Depends(get_db),
-        user=Depends(require_admin),
+        user=Depends(get_current_user),
 ):
     profiles_service = ProfilesService(db)
     return await profiles_service.update_profile(profile_id, profile, user)
@@ -48,7 +48,7 @@ async def create_team(
     summary='Delete a profile',
     description='Delete a profile',
 )
-async def create_team(
+async def delete_profile(
         profile_id: int,
         db: AsyncSession = Depends(get_db),
         user=Depends(require_admin),

@@ -7,6 +7,7 @@ from app.domain.models.base import AdvancedBaseModel
 class ProfilePhoto(AdvancedBaseModel):
     __tablename__ = 'profile_photos'
 
+    filename = Column(String, nullable=False)
     file_path = Column(String, nullable=False)
 
     profile_id = Column(Integer, ForeignKey('profiles.id'), nullable=False)

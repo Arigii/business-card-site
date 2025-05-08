@@ -46,11 +46,11 @@ async def create_team(
     summary='Update a team',
     description='Updates a team',
 )
-async def create_team(
+async def update_team(
         team_id: int,
         team: TeamEntity,
         db: AsyncSession = Depends(get_db),
-        user=Depends(get_current_user),
+        user=Depends(require_admin),
 ):
     teams_service = TeamsService(db)
     return await teams_service.update_team(team_id, team)
@@ -62,7 +62,7 @@ async def create_team(
     summary='Delete a team',
     description='Delete a team',
 )
-async def create_team(
+async def delete_team(
         team_id: int,
         db: AsyncSession = Depends(get_db),
         user=Depends(require_admin),

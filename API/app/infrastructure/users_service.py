@@ -52,13 +52,19 @@ class UsersService:
 
         return user_entity
 
-    async def change_user_password(self, user_id: int, new_password: str) -> Optional[UserEntity]:
+    async def change_user_password(self, user_id: int, new_password: str, user: User) -> Optional[UserEntity]:
         user_model = await self.users_repository.get_by_id(user_id)
 
         if user_model is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="The user with this ID was not found",
+            )
+
+        if user_model.id != user_id and user.profile.role.title != 'Администратор':
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Permission denied",
             )
 
         if not self.is_strong_password(new_password):
