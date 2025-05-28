@@ -188,6 +188,7 @@ const authorisation = async () => {
 }
 
 
+
 .marquee-text {
   display: flex;
   align-items: center;
