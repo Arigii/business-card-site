@@ -2,7 +2,11 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Notify } from 'quasar'
-import loginUser from "../api/auth/loginRequest.js"
+import axios from 'axios'
+
+import CONFIG from '../core/config.js'
+import loginUser from '../api/auth/loginRequest.js'
+
 
 const router = useRouter()
 const login = ref('')
@@ -11,14 +15,12 @@ const loading = ref(false)
 
 const marqueeTrack = ref(null)
 const marqueeText = ref(null)
-const animationDuration = ref(7) // секунд
+const animationDuration = ref(7)
 
-// Динамически рассчитываем длительность анимации в зависимости от ширины текста
 const updateAnimation = () => {
   if (marqueeTrack.value && marqueeText.value) {
     const textWidth = marqueeText.value.offsetWidth
     const containerWidth = marqueeTrack.value.offsetWidth / 2
-    // Скорость: 100px/sec (можно подстроить)
     const speed = 100
     animationDuration.value = (textWidth + containerWidth) / speed
     marqueeTrack.value.style.setProperty('--marquee-width', `${textWidth}px`)
@@ -27,7 +29,7 @@ const updateAnimation = () => {
 }
 
 onMounted(() => {
-  setTimeout(updateAnimation, 100) // Дать DOM отрисоваться
+  setTimeout(updateAnimation, 100)
   window.addEventListener('resize', updateAnimation)
 })
 onBeforeUnmount(() => {
@@ -37,12 +39,21 @@ onBeforeUnmount(() => {
 const authorisation = async () => {
   loading.value = true
   try {
-    const accessToken = await loginUser({
+    const { access_token, user_id } = await loginUser({
       login: login.value,
       password: password.value
     })
 
-    localStorage.setItem('access_token', accessToken)
+    localStorage.setItem('access_token', access_token)
+    localStorage.setItem('user_id', user_id)
+
+    const profileResponse = await axios.get(`${CONFIG.BASE_URL}/profiles/user/${user_id}/`, {
+      headers: { Authorization: `Bearer ${access_token}` }
+    })
+
+    const roleId = profileResponse.data.role_id
+
+
 
     Notify.create({
       type: 'positive',
@@ -50,7 +61,21 @@ const authorisation = async () => {
       icon: 'check_circle'
     })
 
-    router.push('/')
+    console.log('Role ID:', roleId)
+    if (roleId === 1) {
+      console.log('Переход на /admin')
+      router.push('/admin')
+    } else {
+      console.log('Переход на /')
+      router.push('/')
+    }
+
+
+    if (roleId === 1) {
+      router.push('/admin')
+    } else {
+      router.push('/')
+    }
   } catch (error) {
     Notify.create({
       type: 'negative',
@@ -62,6 +87,7 @@ const authorisation = async () => {
   }
 }
 </script>
+
 
 <template>
   <div class="fullscreen flex flex-center bg-violet-strong">

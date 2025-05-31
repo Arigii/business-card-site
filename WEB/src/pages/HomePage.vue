@@ -1,17 +1,15 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { isAuthenticated as checkAuth, isAdmin as checkAdmin } from '../utils/auth.js'
+
+
 
 const router = useRouter()
 
-const isAuthenticated = computed(() => checkAuth())
-
-const isAdmin = computed(() => checkAdmin())
+// Реактивное вычисление статуса авторизации
+const isAuthenticated = computed(() => !!localStorage.getItem('access_token'))
 
 const goToLogin = () => router.push('/login')
-const goToAdmin = () => router.push('/admin')
-
 const logout = () => {
   localStorage.removeItem('access_token')
   router.go(0) // Принудительное обновление страницы для обновления состояния
@@ -24,15 +22,6 @@ const logout = () => {
 
     <div v-if="isAuthenticated" class="q-gutter-sm">
       <q-btn label="Редактировать профиль" color="secondary" />
-
-      <q-btn
-          v-if="isAdmin"
-          label="Управление данными"
-          color="accent"
-          @click="goToAdmin"
-          icon="admin_panel_settings"
-      />
-
       <q-btn label="Выход" color="negative" @click="logout" />
     </div>
 

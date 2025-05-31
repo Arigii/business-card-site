@@ -1,23 +1,12 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from "../pages/LoginPage.vue"
 import HomePage from "../pages/HomePage.vue"
 import AdminPage from "../pages/AdminPage.vue"
-import { isAuthenticated, getUserRole } from "../utils/auth.js"
 
 const routes = [
-    {
-        path: '/',
-        component: HomePage
-    },
-    {
-        path: '/login',
-        component: LoginPage
-    },
-    {
-        path: '/admin',
-        component: AdminPage,
-        meta: { requiresAuth: true, requiresAdmin: true }
-    }
+    { path: '/', component: HomePage },
+    { path: '/login', component: LoginPage },
+    { path: '/admin', component: AdminPage }
 ]
 
 const router = createRouter({
@@ -26,30 +15,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const authenticated = isAuthenticated()
+    const isAuthenticated = !!localStorage.getItem('access_token')
+    const userId = localStorage.getItem('user_id')
 
-    // Если переходим на страницу логина и уже авторизованы
-    if (to.path === '/login' && authenticated) {
+    if (to.path === '/login' && isAuthenticated) {
         next('/')
-        return
-    }
-
-    // Проверка доступа к админ-панели
-    if (to.meta.requiresAdmin) {
-        if (!authenticated) {
-            next('/login')
-            return
-        }
-
-        const userRole = getUserRole()
-        if (userRole !== 'admin') {
-            // Редирект на главную, если не админ
+    } else if (to.path === '/admin') {
+        if (isAuthenticated && userId === '1') {
+            next()
+        } else {
             next('/')
-            return
         }
+    } else {
+        next()
     }
-
-    next()
 })
 
 export default router

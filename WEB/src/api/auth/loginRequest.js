@@ -6,10 +6,13 @@ const loginUser = async (loginData) => {
         const response = await axios.post(`${CONFIG.BASE_URL}/auth/`, loginData, {
             withCredentials: true,
         });
-        return response.data.access_token;
+
+        const { access_token, user_id } = response.data;
+
+        return { access_token, user_id };
     } catch (error) {
-        if (error.status === 401) {
-            throw new Error("Неверное имя пользователя или пароль")
+        if (error.response?.status === 401) {
+            throw new Error("Неверное имя пользователя или пароль");
         }
 
         throw new Error(error.message);
