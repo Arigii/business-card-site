@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.session import get_db
@@ -55,3 +55,22 @@ async def delete_profile(
 ):
     profiles_service = ProfilesService(db)
     return await profiles_service.delete(profile_id, user)
+
+
+@router.get(
+    '/user/{user_id}/',
+    response_model=Optional[ProfileEntity],
+    summary='Get profile by user ID',
+    description='Retrieve profile data by user ID',
+)
+async def get_profile_by_user_id(
+        user_id: int,
+        db: AsyncSession = Depends(get_db),
+        user=Depends(get_current_user),
+):
+    profiles_service = ProfilesService(db)
+    profile = await profiles_service.get_by_user_id(user_id)
+
+    return profile
+
+

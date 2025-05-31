@@ -33,8 +33,8 @@ class TeamsService:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Team not found")
 
         team_model.title = team.title
-        team_model.description = team_model.description
-        team_model.git_url = team_model.git_url
+        team_model.description = team.description
+        team_model.git_url = team.git_url
 
         await self.teams_repository.update(team_model)
 
