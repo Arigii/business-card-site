@@ -32,6 +32,7 @@ class ProjectsService:
         if not project_model:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
 
+        project_model.title = project.title
         project_model.description = project.description
         project_model.repository_url = project.repository_url
 
@@ -53,6 +54,7 @@ class ProjectsService:
     def model_to_entity(project_model: Project) -> ProjectEntity:
         return ProjectEntity(
             id=project_model.id,
+            title=project_model.title,
             description=project_model.description,
             repository_url=project_model.repository_url,
         )
@@ -60,6 +62,7 @@ class ProjectsService:
     @staticmethod
     def entity_to_model(project_entity: ProjectEntity) -> Project:
         project_model = Project(
+            title=project_entity.title,
             description=project_entity.description,
             repository_url=project_entity.repository_url,
         )
