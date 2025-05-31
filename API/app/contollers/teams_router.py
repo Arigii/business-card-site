@@ -34,7 +34,7 @@ async def get_all_teams(
 async def create_team(
         team: TeamEntity,
         db: AsyncSession = Depends(get_db),
-        user=Depends(get_current_user),
+        user=Depends(require_admin),
 ):
     teams_service = TeamsService(db)
     return await teams_service.create_team(team)
