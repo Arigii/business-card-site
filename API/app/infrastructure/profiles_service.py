@@ -102,6 +102,17 @@ class ProfilesService:
 
         return self.model_to_entity(result)
 
+    async def get_by_user_id(self, user_id: int) -> Optional[ProfileEntity]:
+        user = await self.users_repository.get_by_id(user_id)
+        if user is None:
+            raise HTTPException(status_code=404, detail='User not found')
+
+        profile_model = await self.profiles_repository.get_by_id(user.profile_id)
+        if not profile_model:
+            raise HTTPException(status_code=404, detail='Profile not found')
+
+        return self.model_to_entity(profile_model)
+
     @staticmethod
     def model_to_entity(profile_model: Profile) -> ProfileEntity:
         return ProfileEntity(
